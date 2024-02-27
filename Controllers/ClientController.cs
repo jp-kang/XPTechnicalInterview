@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using XPTechnicalInterview.Domain;
-using XPTechnicalInterview.Dto;
 using XPTechnicalInterview.Interfaces;
 using XPTechnicalInterview.Repositories;
 using XPTechnicalInterview.Services;
