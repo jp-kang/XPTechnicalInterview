@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using XPTechnicalInterview.Domain;
 using XPTechnicalInterview.Interfaces;
 using XPTechnicalInterview.Repositories;
@@ -16,9 +17,12 @@ namespace XPTechnicalInterview.Controllers
         {
             investmentService = _InvestmentService;
         }
-        [HttpPost]
-        [Route("buyInvestment")]
-        public IActionResult BuyInvestment(BuyOrder buyOrder)
+
+        [HttpPost("buyInvestment")]
+        [Consumes("application/json")] // Specify the consumed content type
+        [ProducesResponseType(typeof(Investment), StatusCodes.Status200OK)] // Expected response type for success
+        [ProducesResponseType(StatusCodes.Status400BadRequest)] // Expected response for bad request
+        public ActionResult<Investment> BuyInvestment(BuyOrder buyOrder)
         {
             if (!ModelState.IsValid)
             {
@@ -31,7 +35,9 @@ namespace XPTechnicalInterview.Controllers
 
         [HttpPost]
         [Route("sellInvestment")]
-        public IActionResult SellInvestment(SellOrder sellOrder)
+        [ProducesResponseType(typeof(Investment), StatusCodes.Status200OK)] // Expected response type for success
+        [ProducesResponseType(StatusCodes.Status400BadRequest)] // Expected response for bad request
+        public ActionResult<Investment> SellInvestment(SellOrder sellOrder)
         {
             if (!ModelState.IsValid)
             {
@@ -43,7 +49,9 @@ namespace XPTechnicalInterview.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetInvestmentById(int id)
+        [ProducesResponseType(typeof(Investment), StatusCodes.Status200OK)] // Expected response type for success
+        [ProducesResponseType(StatusCodes.Status404NotFound)] // Expected response for bad request
+        public ActionResult<Investment> GetInvestmentById(int id)
         {
             var investment = investmentService.GetInvestmentById(id);
             if (investment == null)
@@ -55,28 +63,32 @@ namespace XPTechnicalInterview.Controllers
 
         [HttpGet]
         [Route("getInvestmentsByClientId")]
-        public IActionResult GetInvestmentsByClientId(long clientId)
+        [ProducesResponseType(typeof(List<Investment>), StatusCodes.Status200OK)] // Expected response type for success
+        public ActionResult<List<Investment>> GetInvestmentsByClientId(long clientId)
         {
             return Ok(investmentService.GetInvestmentsByClientId(clientId));//200
         }
 
         [HttpGet]
         [Route("getActiveInvestmentsByClientId")]
-        public IActionResult GetActiveInvestmentsByClientId(long clientId)
+        [ProducesResponseType(typeof(List<Investment>), StatusCodes.Status200OK)] // Expected response type for success
+        public ActionResult<List<Investment>> GetActiveInvestmentsByClientId(long clientId)
         {
             return Ok(investmentService.GetActiveInvestmentsByClientId(clientId));//200
         }
 
         [HttpGet]
         [Route("getSoldInvestmentsByClientId")]
-        public IActionResult GetSoldInvestmentsByClientId(long clientId)
+        [ProducesResponseType(typeof(List<Investment>), StatusCodes.Status200OK)] // Expected response type for success
+        public ActionResult<List<Investment>> GetSoldInvestmentsByClientId(long clientId)
         {
             return Ok(investmentService.GetSoldInvestmentsByClientId(clientId));//200
         }
 
         [HttpGet]
         [Route("getInvestmentsByProductId")]
-        public IActionResult GetInvestmentsByProductId(long productId)
+        [ProducesResponseType(typeof(List<Investment>), StatusCodes.Status200OK)] // Expected response type for success
+        public ActionResult<List<Investment>> GetInvestmentsByProductId(long productId)
         {
             return Ok(investmentService.GetInvestmentsByProductId(productId));//200
         }

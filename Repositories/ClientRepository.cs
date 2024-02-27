@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using XPTechnicalInterview.Domain;
 using XPTechnicalInterview.Entity;
+using XPTechnicalInterview.Exceptions;
 using XPTechnicalInterview.Interfaces;
 
 namespace XPTechnicalInterview.Repositories
@@ -50,6 +51,10 @@ namespace XPTechnicalInterview.Repositories
             {
                 _context.Clients.Remove(clientToDelete);
                 _context.SaveChanges();
+            }
+            else
+            {
+                throw new RecordNotFoundException($"Client {id} not found.");
             }
         }
     }
