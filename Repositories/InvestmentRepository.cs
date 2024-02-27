@@ -30,7 +30,12 @@ namespace XPTechnicalInterview.Repositories
 
         public IEnumerable<Investment> GetActiveByClientId(long id)
         {
-            return _context.Investments.Where(x => x.ClientId == id && x.Status == "A").ToList();
+            return _context.Investments.Where(x => x.ClientId == id && x.Status == "Active").ToList();
+        }
+
+        public IEnumerable<Investment> GetSoldByClientId(long id)
+        {
+            return _context.Investments.Where(x => x.ClientId == id && x.Status == "Sold").ToList();
         }
 
         public IEnumerable<Investment> GetByProductId(long id)

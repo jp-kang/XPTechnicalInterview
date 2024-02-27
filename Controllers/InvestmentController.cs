@@ -10,70 +10,75 @@ namespace XPTechnicalInterview.Controllers
     [Route("[controller]")]
     public class InvestmentController : ControllerBase
     {
-        private readonly InvestmentService _InvestmentService;
-        private readonly InvestmentRepository _InvestmentRepository;
+        private readonly InvestmentService investmentService;
 
-        public InvestmentController(InvestmentService InvestmentService, InvestmentRepository InvestmentRepository)
+        public InvestmentController(InvestmentService _InvestmentService)
         {
-            _InvestmentService = InvestmentService;
-            _InvestmentRepository = InvestmentRepository;
+            investmentService = _InvestmentService;
         }
         [HttpPost]
         [Route("buyInvestment")]
-        public IActionResult buyInvestment(BuyOrder buyOrder)
+        public IActionResult BuyInvestment(BuyOrder buyOrder)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState); // Returns a 400 status code with validation errors
+                return BadRequest(ModelState); //400
             }
 
-            var createdInvestment = _InvestmentService.handleBuyOrder(buyOrder);
-            return CreatedAtRoute(new { id = createdInvestment.Id }, createdInvestment);
+            var createdInvestment = investmentService.handleBuyOrder(buyOrder);
+            return CreatedAtRoute(new { id = createdInvestment.Id }, createdInvestment);//201
         }
 
         [HttpPost]
         [Route("sellInvestment")]
-        public IActionResult sellInvestment(SellOrder sellOrder)
+        public IActionResult SellInvestment(SellOrder sellOrder)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState); // Returns a 400 status code with validation errors
+                return BadRequest(ModelState); //400
             }
 
-            var createdInvestment = _InvestmentService.handleSellOrder(sellOrder);
-            return Ok(createdInvestment);
+            var createdInvestment = investmentService.handleSellOrder(sellOrder);
+            return Ok(createdInvestment);//200
         }
 
         [HttpGet("{id}")]
         public IActionResult GetInvestmentById(int id)
         {
-            var investment = _InvestmentRepository.GetById(id);
+            var investment = investmentService.GetInvestmentById(id);
             if (investment == null)
             {
-                return NotFound(); // Returns a 404 status code if client not found
+                return NotFound(); //404
             }
-            return Ok(investment); // Returns a 200 status code with the specific client
+            return Ok(investment); //200
         }
 
         [HttpGet]
         [Route("getInvestmentsByClientId")]
-        public IActionResult getInvestmentsByClientId(long clientId)
+        public IActionResult GetInvestmentsByClientId(long clientId)
         {
-            return Ok(_InvestmentRepository.GetByClientId(clientId));
+            return Ok(investmentService.GetInvestmentsByClientId(clientId));//200
         }
 
         [HttpGet]
         [Route("getActiveInvestmentsByClientId")]
-        public IActionResult getActiveInvestmentsByClientId(long clientId)
+        public IActionResult GetActiveInvestmentsByClientId(long clientId)
         {
-            return Ok(_InvestmentRepository.GetActiveByClientId(clientId));
+            return Ok(investmentService.GetActiveInvestmentsByClientId(clientId));//200
+        }
+
+        [HttpGet]
+        [Route("getSoldInvestmentsByClientId")]
+        public IActionResult GetSoldInvestmentsByClientId(long clientId)
+        {
+            return Ok(investmentService.GetSoldInvestmentsByClientId(clientId));//200
         }
 
         [HttpGet]
         [Route("getInvestmentsByProductId")]
-        public IActionResult getInvestmentsByProductId(long productId)
+        public IActionResult GetInvestmentsByProductId(long productId)
         {
-            return Ok(_InvestmentRepository.GetByProductId(productId));
+            return Ok(investmentService.GetInvestmentsByProductId(productId));//200
         }
     }
 }

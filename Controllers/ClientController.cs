@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using XPTechnicalInterview.Domain;
+using XPTechnicalInterview.Dto;
 using XPTechnicalInterview.Interfaces;
 using XPTechnicalInterview.Repositories;
+using XPTechnicalInterview.Services;
 
 namespace XPTechnicalInterview.Controllers
 {
@@ -9,17 +11,17 @@ namespace XPTechnicalInterview.Controllers
     [Route("[controller]")]
     public class ClientController : ControllerBase
     {
-        private readonly ClientRepository _ClientRepository;
-        public ClientController(ClientRepository ClientRepository)
+        private readonly ClientService clientService;
+        public ClientController(ClientService _ClientRepository)
         {
-            _ClientRepository = ClientRepository;
+            clientService = _ClientRepository;
         }
 
         // GET: api/clients
         [HttpGet]
         public IActionResult GetClients()
         {
-            var clients = _ClientRepository.ListAll();
+            var clients = clientService.GetClients();
             return Ok(clients); //200
         }
 
@@ -27,7 +29,7 @@ namespace XPTechnicalInterview.Controllers
         [HttpGet("{id}")]
         public IActionResult GetClientById(int id)
         {
-            var client = _ClientRepository.GetById(id);
+            var client = clientService.GetClientById(id);
             if (client == null)
             {
                 return NotFound(); //404
@@ -44,7 +46,7 @@ namespace XPTechnicalInterview.Controllers
                 return BadRequest(ModelState); //400
             }
 
-            var createdClient = _ClientRepository.Create(client);
+            var createdClient = clientService.CreateClient(client);
             return CreatedAtRoute(new { id = createdClient.ClientId }, createdClient); //201
         }
 
@@ -57,7 +59,7 @@ namespace XPTechnicalInterview.Controllers
                 return BadRequest(ModelState); //400
             }
 
-            var updated = _ClientRepository.Update(client);
+            var updated = clientService.UpdateClient(client);
             return Ok(updated); //200
         }
 
@@ -65,7 +67,7 @@ namespace XPTechnicalInterview.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteClient(int id)
         {
-            _ClientRepository.Delete(id);
+            clientService.DeleteClient(id);
             return Ok();//200
         }
     }

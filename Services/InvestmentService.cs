@@ -1,4 +1,5 @@
-﻿using XPTechnicalInterview.Domain;
+﻿using Microsoft.AspNetCore.Mvc;
+using XPTechnicalInterview.Domain;
 using XPTechnicalInterview.Interfaces;
 using XPTechnicalInterview.Repositories;
 
@@ -6,14 +7,14 @@ namespace XPTechnicalInterview.Services
 {
     public class InvestmentService
     {
-        private readonly InvestmentRepository _InvestmentRepository;
-        private readonly FinancialProductRepository _FinancialProductRepository; 
-        private readonly ClientRepository _ClientRepository;
-        public InvestmentService(InvestmentRepository InvestmentRepository, FinancialProductRepository FinancialProductRepository, ClientRepository ClientRepository)
+        private readonly InvestmentRepository investmentRepository;
+        private readonly FinancialProductRepository financialProductRepository; 
+        private readonly ClientRepository clientRepository;
+        public InvestmentService(InvestmentRepository _InvestmentRepository, FinancialProductRepository _FinancialProductRepository, ClientRepository _ClientRepository)
         {
-            _InvestmentRepository = InvestmentRepository;
-            _FinancialProductRepository = FinancialProductRepository;
-            _ClientRepository = ClientRepository;
+            investmentRepository = _InvestmentRepository;
+            financialProductRepository = _FinancialProductRepository;
+            clientRepository = _ClientRepository;
         }
         public Investment handleBuyOrder(BuyOrder order)
         {
@@ -24,34 +25,64 @@ namespace XPTechnicalInterview.Services
                     ClientId = order.ClientId,
                     FinancialProductId = order.ProductId,
                     PurchaseDate = order.PurchaseDate,
-                    PurchasePrice = _FinancialProductRepository.GetById(order.ProductId).Price,
+                    PurchasePrice = financialProductRepository.GetById(order.ProductId).Price,
                     Status = "Active"
                 };
-                return _InvestmentRepository.Create(investment);
+                return investmentRepository.Create(investment);
             }
         }
 
         public Investment handleSellOrder(SellOrder order)
         {
-            var investment = _InvestmentRepository.GetById(order.InvestmentId);
+            var investment = investmentRepository.GetById(order.InvestmentId);
             if (investment != null)
             {
                 investment.SellDate = order.SellDate;
-                investment.SellPrice = _FinancialProductRepository.GetById(investment.FinancialProductId).Price;
+                investment.SellPrice = financialProductRepository.GetById(investment.FinancialProductId).Price;
                 investment.Status = "Sold";
             } 
             else
             {
                 throw new KeyNotFoundException("Investment not found");
             }
-            return _InvestmentRepository.Update(investment);
+            return investmentRepository.Update(investment);
+        }
+
+        public Investment GetInvestmentById(int id)
+        {
+            var investment = investmentRepository.GetById(id);
+            return investment; 
+        }
+
+        public IEnumerable<Investment> GetInvestmentsByClientId(long clientId)
+        {
+            var investments = investmentRepository.GetByClientId(clientId);
+            return investments;
+        }
+
+        public IEnumerable<Investment> GetActiveInvestmentsByClientId(long clientId)
+        {
+            var investments = investmentRepository.GetActiveByClientId(clientId);
+            return investments;
+        }
+
+        public IEnumerable<Investment> GetSoldInvestmentsByClientId(long clientId)
+        {
+            var investments = investmentRepository.GetSoldByClientId(clientId);
+            return investments;
+        }
+
+        public IEnumerable<Investment> GetInvestmentsByProductId(long productId)
+        {
+            var investments = investmentRepository.GetByProductId(productId);//200
+            return investments;
         }
 
         private void validateClientAndProduct(long clientId, long productId)
         {
-            var client = _ClientRepository.GetById(clientId);
-            var product = _FinancialProductRepository.GetById(productId);
-            if (client != null || product != null) {
+            var client = clientRepository.GetById(clientId);
+            var product = financialProductRepository.GetById(productId);
+            if (client == null || product == null) {
                 throw new InvalidOperationException("User or product not found!");
             }
         }

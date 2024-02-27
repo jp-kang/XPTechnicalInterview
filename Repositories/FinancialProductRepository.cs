@@ -18,6 +18,11 @@ namespace XPTechnicalInterview.Repositories
             return _context.FinancialProducts.ToList(); // Replace with your specific query if needed
         }
 
+        public IEnumerable<FinancialProduct> ListByExpirationDate(int days)
+        {
+            return _context.FinancialProducts.Where(x => x.DueDate <= DateTime.Now.AddDays(days) && x.DueDate >= DateTime.Now).ToList();
+        }
+
         public FinancialProduct GetById(long id)
         {
             return _context.FinancialProducts.Find(id);
