@@ -49,6 +49,11 @@ namespace XPTechnicalInterview.Repositories
             return _context.Investments.Where(x => x.FinancialProductId == id).ToList();
         }
 
+        public IEnumerable<Investment> GetActiveByProductId(long id)
+        {
+            return _context.Investments.Where(x => x.FinancialProductId == id && x.Status == "Active").ToList();
+        }
+
         public Investment Create(Investment entity)
         {
             _context.Investments.Add(entity);

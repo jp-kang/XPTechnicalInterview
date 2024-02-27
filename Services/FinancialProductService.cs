@@ -9,9 +9,11 @@ namespace XPTechnicalInterview.Services
     public class FinancialProductService
     {
         private readonly FinancialProductRepository financialProductRepository;
-        public FinancialProductService(FinancialProductRepository _FinancialProductRepository)
+        private readonly InvestmentRepository investmentRepository;
+        public FinancialProductService(FinancialProductRepository _FinancialProductRepository, InvestmentRepository _InvestmentRepository)
         {
             financialProductRepository = _FinancialProductRepository;
+            investmentRepository = _InvestmentRepository;
         }
 
         public IEnumerable<FinancialProduct> GetFinancialProducts()
@@ -53,6 +55,11 @@ namespace XPTechnicalInterview.Services
 
         public void DeleteFinancialProduct(int id)
         {
+            var investments = investmentRepository.GetActiveByProductId(id);
+            if (investments.Count() > 0)
+            {
+                throw new InvalidOperationException("This product has active investments, please sell them before deleting the product.");
+            }
             financialProductRepository.Delete(id);
         }
     }

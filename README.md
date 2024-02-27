@@ -92,5 +92,11 @@
  - O método GET /Investment/getSoldInvestmentsByClientId recebe o id de um cliente, e retorna uma lista com todos os investimentos vendidos desse cliente.
  - O método GET /Investment/getInvestmentsByProductId recebe o id de um produto, e retorna uma lista com todos os investimentos desse produto.
 
+## Modelos
+![alt text](image-7.png)
+
+* Acima, pode-se ver os modelos dos dados. Há uma relação de 1:n entre FinancialProduct e Investment, assim como de Client para Investment. Em poucas palavras, isso significa que um investimento só existe a partir de um produto financeiro e um cliente, que um cliente pode ter múltiplos investimentos, e que podem ter vários investimentos de um mesmo produto.
+* Todos os modelos e informações relativo aos endpoints está documento no Swagger da aplicação
+
  # Dúvidas
  Para dúvidas a respeito do código, execução ou funcionamento, favor entrar em contato pelo e-mail: jpkang10@gmail.com

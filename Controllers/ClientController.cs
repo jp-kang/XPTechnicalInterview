@@ -34,18 +34,18 @@ namespace XPTechnicalInterview.Controllers
             try
             {
                 var client = clientService.GetClientById(id);
-                return Ok(client);
+                return Ok(client);//200
             }
             catch (RecordNotFoundException ex)
             {
-                return NotFound(ex.Message); // Set 404 status code
+                return NotFound(ex.Message); //404
             }
         }
 
         // POST: api/clients
         [HttpPost]
         [Consumes("application/json")] // Specify the consumed content type
-        [ProducesResponseType(typeof(Client), StatusCodes.Status200OK)] // Expected response type for success
+        [ProducesResponseType(typeof(Client), StatusCodes.Status201Created)] // Expected response type for success
         [ProducesResponseType(StatusCodes.Status400BadRequest)] // Expected response for bad request
         public ActionResult<Client> CreateClient([FromBody] ClientDTO clientDto)
         {
@@ -78,24 +78,29 @@ namespace XPTechnicalInterview.Controllers
             }
             catch (RecordNotFoundException ex)
             {
-                return NotFound(ex.Message); // Set 404 status code
+                return NotFound(ex.Message); //404
             }
         }
 
         // DELETE: api/clients/{id}
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)] // Expected response type for success
-        [ProducesResponseType(StatusCodes.Status404NotFound)] // Expected response for bad request
+        [ProducesResponseType(StatusCodes.Status400BadRequest)] // Expected response for bad request
+        [ProducesResponseType(StatusCodes.Status404NotFound)] // Expected response for not found
         public IActionResult DeleteClient(int id)
         {
             try
             {
                 clientService.DeleteClient(id);
-                return Ok();
+                return Ok();//200
             }
             catch (RecordNotFoundException ex)
             {
-                return NotFound(ex.Message); // Set 404 status code
+                return NotFound(ex.Message); //404
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);//400
             }
         }
     }

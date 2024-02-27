@@ -7,9 +7,11 @@ namespace XPTechnicalInterview.Services
     public class ClientService
     {
         private readonly ClientRepository clientRepository;
-        public ClientService(ClientRepository _ClientRepository)
+        private readonly InvestmentRepository investmentRepository;
+        public ClientService(ClientRepository _ClientRepository, InvestmentRepository _InvestmentRepository)
         {
             clientRepository = _ClientRepository;
+            investmentRepository = _InvestmentRepository;
         }
 
         public IEnumerable<Client> GetClients()
@@ -42,6 +44,11 @@ namespace XPTechnicalInterview.Services
 
         public void DeleteClient(int id)
         {
+            var investments = investmentRepository.GetActiveByClientId(id);
+            if (investments.Count () > 0)
+            {
+                throw new InvalidOperationException("This user has active investments, please sell them before deleting the user.");
+            }
             clientRepository.Delete(id);
         }
     }

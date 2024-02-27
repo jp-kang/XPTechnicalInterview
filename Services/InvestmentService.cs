@@ -71,10 +71,16 @@ namespace XPTechnicalInterview.Services
             var investments = investmentRepository.GetSoldByClientId(clientId);
             return investments;
         }
-
+        
         public IEnumerable<Investment> GetInvestmentsByProductId(long productId)
         {
             var investments = investmentRepository.GetByProductId(productId);//200
+            return investments;
+        }
+
+        public IEnumerable<Investment> GetActiveInvestmentsByProductId(long productId)
+        {
+            var investments = investmentRepository.GetActiveByProductId(productId);//200
             return investments;
         }
 
@@ -82,8 +88,10 @@ namespace XPTechnicalInterview.Services
         {
             var client = clientRepository.GetById(clientId);
             var product = financialProductRepository.GetById(productId);
-            if ((client == null || client.Status == "DELETED") || (product == null || product.Status == "DELETED")) {
-                throw new InvalidOperationException("User or product not found!");
+            
+            if (client.Status == "DELETED" || product.Status == "DELETED")
+            {
+                throw new InvalidOperationException("User or product not active!");
             }
         }
     }

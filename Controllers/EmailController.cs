@@ -20,7 +20,7 @@ namespace XPTechnicalInterview.Controllers
         public IActionResult SendEmail(Email email)
         {
             emailService.SendEmail(email);
-            return Ok();
+            return Ok();//200
         }
     }
 }

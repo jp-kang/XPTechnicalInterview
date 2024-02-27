@@ -18,7 +18,8 @@ namespace XPTechnicalInterview.Controllers
 
         // GET: api/FinancialProducts
         [HttpGet]
-        public IActionResult GetFinancialProducts()
+        [ProducesResponseType(typeof(List<FinancialProduct>), StatusCodes.Status200OK)] // Expected response type for success
+        public ActionResult<List<FinancialProduct>> GetFinancialProducts()
         {
             var FinancialProducts = financialProductService.GetFinancialProducts();
             return Ok(FinancialProducts); //200
@@ -41,6 +42,7 @@ namespace XPTechnicalInterview.Controllers
         // GET: api/FinancialProducts/days/{days}
         [HttpGet("days/{days}")]
         [ProducesResponseType(typeof(List<FinancialProduct>), StatusCodes.Status200OK)] // Expected response type for success
+        [ProducesResponseType(StatusCodes.Status404NotFound)] // Expected response for not found
         public ActionResult<List<FinancialProduct>> GetProductsNearExpiration(int days)
         {
             try
@@ -54,7 +56,7 @@ namespace XPTechnicalInterview.Controllers
             }
             catch (RecordNotFoundException ex)
             {
-                return NotFound(ex.Message); // Set 404 status code
+                return NotFound(ex.Message); //404
             }
         }
 
@@ -79,7 +81,7 @@ namespace XPTechnicalInterview.Controllers
         [Consumes("application/json")] // Specify the consumed content type
         [ProducesResponseType(typeof(FinancialProduct), StatusCodes.Status200OK)] // Expected response type for success
         [ProducesResponseType(StatusCodes.Status400BadRequest)] // Expected response for bad request
-        [ProducesResponseType(StatusCodes.Status404NotFound)] // Expected response for bad request
+        [ProducesResponseType(StatusCodes.Status404NotFound)] // Expected response for not found
         public ActionResult<FinancialProduct> UpdateFinancialProduct([FromBody] FinancialProduct FinancialProduct)
         {
             try
@@ -94,14 +96,15 @@ namespace XPTechnicalInterview.Controllers
             }
             catch (RecordNotFoundException ex)
             {
-                return NotFound(ex.Message); // Set 404 status code
+                return NotFound(ex.Message); //404
             }
         }
 
         // DELETE: api/FinancialProducts/{id}
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)] // Expected response type for success
-        [ProducesResponseType(StatusCodes.Status404NotFound)] // Expected response for bad request
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]// Expected response for bad request
+        [ProducesResponseType(StatusCodes.Status404NotFound)] // Expected response for not found
         public IActionResult DeleteFinancialProduct(int id)
         {
             try
@@ -111,7 +114,11 @@ namespace XPTechnicalInterview.Controllers
             }
             catch (RecordNotFoundException ex)
             {
-                return NotFound(ex.Message); // Set 404 status code
+                return NotFound(ex.Message); //404
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);//400
             }
         }
     }

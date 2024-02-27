@@ -23,6 +23,7 @@ namespace XPTechnicalInterview.Controllers
         [Consumes("application/json")] // Specify the consumed content type
         [ProducesResponseType(typeof(Investment), StatusCodes.Status200OK)] // Expected response type for success
         [ProducesResponseType(StatusCodes.Status400BadRequest)] // Expected response for bad request
+        [ProducesResponseType(StatusCodes.Status404NotFound)] // Expected response for not found
         public ActionResult<Investment> BuyInvestment(BuyOrder buyOrder)
         {
             try
@@ -36,7 +37,11 @@ namespace XPTechnicalInterview.Controllers
             }
             catch (RecordNotFoundException ex)
             {
-                return NotFound(ex.Message); // Set 404 status code
+                return NotFound(ex.Message); //404
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
 
@@ -57,7 +62,7 @@ namespace XPTechnicalInterview.Controllers
 
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(Investment), StatusCodes.Status200OK)] // Expected response type for success
-        [ProducesResponseType(StatusCodes.Status404NotFound)] // Expected response for bad request
+        [ProducesResponseType(StatusCodes.Status404NotFound)] // Expected response for not found
         public ActionResult<Investment> GetInvestmentById(int id)
         {
             try
@@ -71,7 +76,7 @@ namespace XPTechnicalInterview.Controllers
             }
             catch (RecordNotFoundException ex)
             {
-                return NotFound(ex.Message); // Set 404 status code
+                return NotFound(ex.Message); //404
             }
         }
 
@@ -98,13 +103,21 @@ namespace XPTechnicalInterview.Controllers
         {
             return Ok(investmentService.GetSoldInvestmentsByClientId(clientId));//200
         }
-
+        
         [HttpGet]
         [Route("getInvestmentsByProductId")]
         [ProducesResponseType(typeof(List<Investment>), StatusCodes.Status200OK)] // Expected response type for success
         public ActionResult<List<Investment>> GetInvestmentsByProductId(long productId)
         {
             return Ok(investmentService.GetInvestmentsByProductId(productId));//200
+        }
+
+        [HttpGet]
+        [Route("getActiveInvestmentsByProductId")]
+        [ProducesResponseType(typeof(List<Investment>), StatusCodes.Status200OK)] // Expected response type for success
+        public ActionResult<List<Investment>> GetActiveInvestmentsByProductId(long productId)
+        {
+            return Ok(investmentService.GetActiveInvestmentsByProductId(productId));//200
         }
     }
 }
