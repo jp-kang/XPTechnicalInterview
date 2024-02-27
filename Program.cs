@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Configuration;
 using XPTechnicalInterview.Entity;
 using XPTechnicalInterview.Repositories;
 using XPTechnicalInterview.Services;
@@ -25,7 +26,7 @@ builder.Services.AddScoped<ClientService>();
 builder.Services.AddScoped<FinancialProductService>();
 
 builder.Services.AddSingleton<PortfolioContext>();
-
+builder.Configuration.SetBasePath(Directory.GetCurrentDirectory());
 var app = builder.Build();
 
 using (var context = new PortfolioContext())

@@ -7,12 +7,16 @@ namespace XPTechnicalInterview.Services
 {
     public class EmailService
     {
-        private readonly String user = "emailservice772@gmail.com";
-        private readonly String password = "qsqe saho kcgm csxn";
+        private string user;
+        private string password;
         private readonly FinancialProductRepository financialProductRepository;
-        public EmailService(FinancialProductRepository _FinancialProductRepository)
+        private readonly IConfiguration configuration;
+        public EmailService(FinancialProductRepository _FinancialProductRepository, IConfiguration _Configuration)
         {
             financialProductRepository = _FinancialProductRepository;
+            configuration = _Configuration;
+            user = configuration["Settings:EmailUser"];
+            password = configuration["Settings:EmailPassword"];
         }
         public void SendEmail(Email email)
         {
