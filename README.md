@@ -26,6 +26,7 @@
     - Serviço de gerenciamento de produtos
     - Serviço de gerenciamento de portfólio
     - Serviço de disparo de email
+* Para propósito de testes, o banco de dados já conta com algumas informações que podem ser consultadas e alteradas pelos métodos explicados posteriormente.
 
 # Como executar
 
@@ -41,8 +42,8 @@
     - 2 - Pelo Visual Studio, selecionar a opção de abrir projeto ou pasta, e escolher o arquivo XPTechnicalInterview.sln.
     - 3 - Na aba "Build" selecionar a opção "Build Solution", conforme indicado abaixo.
 
-        ![alt text](image-6.png)
-    - 4 - Alterar modo de execução para "Release" e iniciar a aplicação, conforme indicado pela imagem abaixo.
+        ![alt text](image-8.png)
+    - 4 - Alterar modo de execução para "Release" e iniciar a aplicação, conforme indicado pela imagem abaixo. Ao executar, uma janela de navegador irá abrir automaticamente na página do Swagger.
     
         ![alt text](image-1.png)
     - 5 - Utilizar endpoints disponibilizados no Swagger
