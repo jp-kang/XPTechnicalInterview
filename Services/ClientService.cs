@@ -1,8 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
-using XPTechnicalInterview.Domain;
-using XPTechnicalInterview.Dto;
+﻿using XPTechnicalInterview.Domain;
 using XPTechnicalInterview.Repositories;
 
 namespace XPTechnicalInterview.Services
