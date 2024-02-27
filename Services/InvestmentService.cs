@@ -82,7 +82,7 @@ namespace XPTechnicalInterview.Services
         {
             var client = clientRepository.GetById(clientId);
             var product = financialProductRepository.GetById(productId);
-            if (client == null || product == null) {
+            if ((client == null || client.Status == "DELETED") || (product == null || product.Status == "DELETED")) {
                 throw new InvalidOperationException("User or product not found!");
             }
         }

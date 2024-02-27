@@ -27,6 +27,8 @@ namespace XPTechnicalInterview.Controllers
 
         // GET: api/clients/{id}
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(Client), StatusCodes.Status200OK)] // Expected response type for success
+        [ProducesResponseType(StatusCodes.Status404NotFound)] // Expected response for not found
         public ActionResult<Client> GetClientById(int id)
         {
             try
@@ -61,15 +63,23 @@ namespace XPTechnicalInterview.Controllers
         [Consumes("application/json")] // Specify the consumed content type
         [ProducesResponseType(typeof(Client), StatusCodes.Status200OK)] // Expected response type for success
         [ProducesResponseType(StatusCodes.Status400BadRequest)] // Expected response for bad request
+        [ProducesResponseType(StatusCodes.Status404NotFound)] // Expected response for not found
         public IActionResult UpdateClient([FromBody] Client client)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState); //400
-            }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState); //400
+                }
 
-            var updated = clientService.UpdateClient(client);
-            return Ok(updated); //200
+                var updated = clientService.UpdateClient(client);
+                return Ok(updated); //200
+            }
+            catch (RecordNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Set 404 status code
+            }
         }
 
         // DELETE: api/clients/{id}

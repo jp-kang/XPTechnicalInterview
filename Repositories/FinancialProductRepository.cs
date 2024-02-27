@@ -1,5 +1,6 @@
 ﻿using XPTechnicalInterview.Domain;
 using XPTechnicalInterview.Entity;
+using XPTechnicalInterview.Exceptions;
 using XPTechnicalInterview.Interfaces;
 
 namespace XPTechnicalInterview.Repositories
@@ -15,21 +16,27 @@ namespace XPTechnicalInterview.Repositories
 
         public IEnumerable<FinancialProduct> ListAll()
         {
-            return _context.FinancialProducts.ToList(); // Replace with your specific query if needed
+            return _context.FinancialProducts.Where(x => x.Status == "ACTIVE").ToList(); // Replace with your specific query if needed
         }
 
         public IEnumerable<FinancialProduct> ListByExpirationDate(int days)
         {
-            return _context.FinancialProducts.Where(x => x.DueDate <= DateTime.Now.AddDays(days) && x.DueDate >= DateTime.Now).ToList();
+            return _context.FinancialProducts.Where(x => x.DueDate <= DateTime.Now.AddDays(days) && x.DueDate >= DateTime.Now && x.Status == "ACTIVE").ToList();
         }
 
         public FinancialProduct GetById(long id)
         {
-            return _context.FinancialProducts.Find(id);
+            var product = _context.FinancialProducts.Find(id);
+            if (product == null)
+            {
+                throw new RecordNotFoundException($"Financial Product {id} not found.");
+            }
+            return product;
         }
 
         public FinancialProduct Create(FinancialProduct entity)
         {
+            entity.Status = "ACTIVE";
             _context.FinancialProducts.Add(entity);
             _context.SaveChanges();
             return entity;
@@ -47,17 +54,25 @@ namespace XPTechnicalInterview.Repositories
 
                 _context.SaveChanges();
             }
+            else
+            {
+                throw new RecordNotFoundException($"Financial Product {entity.FinancialProductId} not found.");
+            }
             return entity;
-
         }
 
         public void Delete(long id)
         {
-            var FinancialProductToDelete = _context.FinancialProducts.Find(id);
-            if (FinancialProductToDelete != null)
+            var delete = _context.FinancialProducts.FirstOrDefault(x => x.FinancialProductId == id);
+            if (delete != null)
             {
-                _context.FinancialProducts.Remove(FinancialProductToDelete);
+                delete.Status = "DELETED";
+
                 _context.SaveChanges();
+            }
+            else
+            {
+                throw new RecordNotFoundException($"Financial Product {id} not found.");
             }
         }
     }

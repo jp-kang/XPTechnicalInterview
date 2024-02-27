@@ -15,6 +15,8 @@ namespace XPTechnicalInterview.Controllers
         }
 
         [HttpPost]
+        [Consumes("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)] // Expected response type for success
         public IActionResult SendEmail(Email email)
         {
             emailService.SendEmail(email);

@@ -14,8 +14,6 @@ namespace XPTechnicalInterview.Entity
 
         public PortfolioContext()
         {
-            //var folder = Environment.SpecialFolder.LocalApplicationData;
-            //var path = Environment.GetFolderPath(folder);
             DbPath = System.IO.Path.Join("Data/porfolio.db");
         }
         protected override void OnConfiguring(DbContextOptionsBuilder options)

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using XPTechnicalInterview.Domain;
+using XPTechnicalInterview.Exceptions;
 using XPTechnicalInterview.Interfaces;
 using XPTechnicalInterview.Repositories;
 using XPTechnicalInterview.Services;
@@ -24,13 +25,19 @@ namespace XPTechnicalInterview.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)] // Expected response for bad request
         public ActionResult<Investment> BuyInvestment(BuyOrder buyOrder)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState); //400
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState); //400
+                }
+                var createdInvestment = investmentService.handleBuyOrder(buyOrder);
+                return CreatedAtRoute(new { id = createdInvestment.Id }, createdInvestment);//201
             }
-
-            var createdInvestment = investmentService.handleBuyOrder(buyOrder);
-            return CreatedAtRoute(new { id = createdInvestment.Id }, createdInvestment);//201
+            catch (RecordNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Set 404 status code
+            }
         }
 
         [HttpPost]
@@ -53,12 +60,19 @@ namespace XPTechnicalInterview.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)] // Expected response for bad request
         public ActionResult<Investment> GetInvestmentById(int id)
         {
-            var investment = investmentService.GetInvestmentById(id);
-            if (investment == null)
+            try
             {
-                return NotFound(); //404
+                var investment = investmentService.GetInvestmentById(id);
+                if (investment == null)
+                {
+                    return NotFound(); //404
+                }
+                return Ok(investment); //200
             }
-            return Ok(investment); //200
+            catch (RecordNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Set 404 status code
+            }
         }
 
         [HttpGet]

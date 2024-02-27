@@ -1,3 +1,4 @@
+using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 
 namespace XPTechnicalInterview.Domain
@@ -10,5 +11,8 @@ namespace XPTechnicalInterview.Domain
         public string Description { get; set; }
         public float Price { get; set; }
         public DateTime DueDate { get; set; }
+
+        [SwaggerSchema(ReadOnly = true)]
+        public string? Status { get; set; }
     }
 }

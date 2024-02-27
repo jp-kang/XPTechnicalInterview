@@ -17,16 +17,23 @@ namespace XPTechnicalInterview.Repositories
 
         public IEnumerable<Client> ListAll()
         {
-            return _context.Clients.ToList(); // Replace with your specific query if needed
+            return _context.Clients.Where(x => x.Status == "ACTIVE").ToList(); // Replace with your specific query if needed
         }
 
         public Client GetById(long id)
         {
-            return _context.Clients.Find(id);
+            var client = _context.Clients.Find(id);
+            if(client == null)
+            {
+                throw new RecordNotFoundException($"Client {id} not found.");
+                
+            }
+            return client;
         }
 
         public Client Create(Client entity)
         {
+            entity.Status = "ACTIVE";
             _context.Clients.Add(entity);
             _context.SaveChanges();
             return entity;
@@ -41,15 +48,20 @@ namespace XPTechnicalInterview.Repositories
 
                 _context.SaveChanges();
             }
+            else
+            {
+                throw new RecordNotFoundException($"Client {entity.ClientId} not found.");
+            }
             return update;
         }
 
         public void Delete(long id)
         {
-            var clientToDelete = _context.Clients.Find(id);
-            if (clientToDelete != null)
+            var delete = _context.Clients.FirstOrDefault(x => x.ClientId == id);
+            if (delete != null)
             {
-                _context.Clients.Remove(clientToDelete);
+                delete.Status = "DELETED";
+
                 _context.SaveChanges();
             }
             else

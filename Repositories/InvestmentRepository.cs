@@ -1,5 +1,6 @@
 ﻿using XPTechnicalInterview.Domain;
 using XPTechnicalInterview.Entity;
+using XPTechnicalInterview.Exceptions;
 using XPTechnicalInterview.Interfaces;
 
 namespace XPTechnicalInterview.Repositories
@@ -20,7 +21,12 @@ namespace XPTechnicalInterview.Repositories
 
         public Investment GetById(long id)
         {
-            return _context.Investments.Find(id);
+            var investment = _context.Investments.Find(id);
+            if (investment == null)
+            {
+                throw new RecordNotFoundException($"Investment {id} not found.");
+            }
+            return investment;
         }
 
         public IEnumerable<Investment> GetByClientId(long id)
@@ -62,6 +68,10 @@ namespace XPTechnicalInterview.Repositories
                 update.PurchasePrice = entity.PurchasePrice;
 
                 _context.SaveChanges();
+            }
+            else
+            {
+                throw new RecordNotFoundException($"Investment {entity.Id} not found.");
             }
             return entity;
         }
