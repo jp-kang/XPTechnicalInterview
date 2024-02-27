@@ -39,10 +39,13 @@
     $ git clone https://github.com/jp-kang/XPTechnicalInterview
     ```
     - 2 - Pelo Visual Studio, selecionar a opção de abrir projeto ou pasta, e escolher o arquivo XPTechnicalInterview.sln.
-    - 3 - Alterar modo de execução para "Release" e iniciar a aplicação, conforme indicado pela imagem abaixo.
+    - 3 - Na aba "Build" selecionar a opção "Build Solution", conforme indicado abaixo.
+
+        ![alt text](image-6.png)
+    - 4 - Alterar modo de execução para "Release" e iniciar a aplicação, conforme indicado pela imagem abaixo.
     
         ![alt text](image-1.png)
-    - 4 - Utilizar endpoints disponibilizados no Swagger
+    - 5 - Utilizar endpoints disponibilizados no Swagger
 
 
 # Funcionalidades
