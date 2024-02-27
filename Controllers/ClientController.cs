@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using XPTechnicalInterview.Domain;
-using XPTechnicalInterview.Interfaces;
-using XPTechnicalInterview.Repositories;
+using XPTechnicalInterview.DTO;
 using XPTechnicalInterview.Services;
 
 namespace XPTechnicalInterview.Controllers
@@ -38,14 +37,14 @@ namespace XPTechnicalInterview.Controllers
 
         // POST: api/clients
         [HttpPost]
-        public IActionResult CreateClient([FromBody] Client client)
+        public IActionResult CreateClient([FromBody] ClientDTO clientDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState); //400
             }
 
-            var createdClient = clientService.CreateClient(client);
+            var createdClient = clientService.CreateClient(clientDto);
             return CreatedAtRoute(new { id = createdClient.ClientId }, createdClient); //201
         }
 

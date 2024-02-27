@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using XPTechnicalInterview.Domain;
-using XPTechnicalInterview.Interfaces;
-using XPTechnicalInterview.Repositories;
+using XPTechnicalInterview.DTO;
 using XPTechnicalInterview.Services;
 
 namespace XPTechnicalInterview.Controllers
@@ -50,14 +49,14 @@ namespace XPTechnicalInterview.Controllers
 
         // POST: api/FinancialProducts
         [HttpPost]
-        public IActionResult CreateFinancialProduct([FromBody] FinancialProduct FinancialProduct)
+        public IActionResult CreateFinancialProduct([FromBody] FinancialProductDTO financialProductDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState); //400
             }
 
-            var createdFinancialProduct = financialProductService.CreateFinancialProduct(FinancialProduct);
+            var createdFinancialProduct = financialProductService.CreateFinancialProduct(financialProductDto);
             return CreatedAtRoute(new { id = createdFinancialProduct.FinancialProductId }, createdFinancialProduct); //201
         }
 

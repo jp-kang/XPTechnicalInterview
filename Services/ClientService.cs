@@ -1,4 +1,5 @@
 ﻿using XPTechnicalInterview.Domain;
+using XPTechnicalInterview.DTO;
 using XPTechnicalInterview.Repositories;
 
 namespace XPTechnicalInterview.Services
@@ -23,8 +24,12 @@ namespace XPTechnicalInterview.Services
             return client;
         }
 
-        public Client CreateClient(Client client)
+        public Client CreateClient(ClientDTO clientDto)
         {
+            var client = new Client
+            {
+                Name = clientDto.Name,
+            };
             var createdClient = clientRepository.Create(client);
             return createdClient;
         }

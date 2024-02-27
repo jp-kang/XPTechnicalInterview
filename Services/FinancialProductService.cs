@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Xml.Linq;
 using XPTechnicalInterview.Domain;
+using XPTechnicalInterview.DTO;
 using XPTechnicalInterview.Repositories;
 
 namespace XPTechnicalInterview.Services
@@ -30,9 +32,16 @@ namespace XPTechnicalInterview.Services
             return financialProduct;
         }
 
-        public FinancialProduct CreateFinancialProduct(FinancialProduct FinancialProduct)
+        public FinancialProduct CreateFinancialProduct(FinancialProductDTO financialProductDto)
         {
-            var createdFinancialProduct = financialProductRepository.Create(FinancialProduct);
+            var financialProduct = new FinancialProduct
+            {
+                Name = financialProductDto.Name,
+                Description = financialProductDto.Description,
+                Price = financialProductDto.Price,
+                DueDate = financialProductDto.DueDate
+            };
+            var createdFinancialProduct = financialProductRepository.Create(financialProduct);
             return createdFinancialProduct; 
         }
 
