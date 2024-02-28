@@ -74,7 +74,7 @@
  - Obs.: O método de deleção realiza uma deleção lógica, e não física.
 
 ## Investimentos
- ![alt text](image-5.png)
+ ![alt text](image-9.png)
  - O método POST /Investment/buyInvestment realiza a compra de um investimento, recebendo o id de um cliente, o id de um produto e a data/hora da compra.
  ```json
   "clientId": 0,
@@ -91,6 +91,7 @@
  - O método GET /Investment/getActiveInvestmentsByClientId recebe o id de um cliente, e retorna uma lista com todos os investimentos ativos desse cliente.
  - O método GET /Investment/getSoldInvestmentsByClientId recebe o id de um cliente, e retorna uma lista com todos os investimentos vendidos desse cliente.
  - O método GET /Investment/getInvestmentsByProductId recebe o id de um produto, e retorna uma lista com todos os investimentos desse produto.
+  - O método GET /Investment/getActiveInvestmentsByProductId recebe o id de um produto, e retorna uma lista com todos os investimentos ativos desse produto.
 
 ## Modelos
 ![alt text](image-7.png)
